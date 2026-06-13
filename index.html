@@ -817,19 +817,20 @@ function startTimer(){
 }
 
 function pickOpt(qid,idx){
-  if(S.done[qid]||S.ans[qid]!==undefined)return;
+  if(S.done[qid])return;
   const q=S.allQ.find(x=>x.id===qid);
   if(!q)return;
-  // Practice mode: immediate feedback
+  // Practice mode: immediate feedback, locked
   if(S.mode==='practice'){
+    if(S.done[qid])return;
     const ok=idx===q.a;
     S.done[qid]={sel:idx,ok};
-    // Save progress
     if(!S.prog[qid])S.prog[qid]={attempts:0,correct:0};
     S.prog[qid].attempts++;
     if(ok)S.prog[qid].correct++;
     saveProg();
   }else{
+    // Exam mode: allow re-selection
     S.ans[qid]=idx;
   }
   render();
